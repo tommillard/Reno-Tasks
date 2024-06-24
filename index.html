@@ -47,7 +47,7 @@
             { title: 'Job 2', id: 2, dependencies: [1], category: 'Kitchen' },
             { title: 'Job 3', id: 3, dependencies: [1], category: 'Bathroom' },
             { title: 'Job 4', id: 4, dependencies: [2, 3], category: 'Living Room' },
-            { title: 'Job 5', id: 5, dependencies: [4], category: 'Living Room' },
+            { title: 'Job 5', id: 5, dependencies: [4, 6], category: 'Living Room' },
             { title: 'Job 6', id: 6, dependencies: [1, 4], category: 'Bedroom' },
             { title: 'Job 7', id: 7, dependencies: [], category: 'Bathroom' }
         ];
@@ -68,9 +68,26 @@
         }
 
         function calculateSchedule(jobs) {
+            // Step 1: Calculate the earliest start day and end day for each job
             jobs.forEach(job => {
                 job.startDay = findStartDay(job, jobs);
                 job.endDay = job.startDay; // Each job takes exactly 1 day
+            });
+
+            // Step 2: Calculate the latest end day for each job
+            const projectEndDay = Math.max(...jobs.map(job => job.endDay));
+            jobs.reverse().forEach(job => {
+                if (job.dependencies.length === 0) {
+                    job.latestEndDay = projectEndDay;
+                } else {
+                    const dependents = jobs.filter(j => j.dependencies.includes(job.id));
+                    job.latestEndDay = Math.min(...dependents.map(dep => dep.startDay)) - 1;
+                }
+            });
+
+            // Step 3: Adjust jobs to their latest possible start day without delaying the project
+            jobs.reverse().forEach(job => {
+                job.latestStartDay = job.latestEndDay - (job.endDay - job.startDay);
             });
 
             return jobs;
@@ -109,7 +126,7 @@
                     for (let day = 1; day <= 10; day++) { // Assuming a maximum of 10 days for simplicity
                         const dayDiv = document.createElement('div');
                         dayDiv.className = 'day';
-                        if (day >= job.startDay && day <= job.endDay) {
+                        if (day >= job.startDay && day <= job.latestEndDay) {
                             dayDiv.classList.add('active-day');
                         }
                         jobContainer.appendChild(dayDiv);
