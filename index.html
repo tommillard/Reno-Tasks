@@ -52,34 +52,51 @@
             { title: 'Job 7', id: 7, dependencies: [], category: 'Bathroom' }
         ];
 
-        function calculateSchedule(jobs) {
-            const jobMap = new Map();
-            jobs.forEach(job => jobMap.set(job.id, job));
+        function findStartDay(job, jobs) {
+            if (job.dependencies.length === 0) {
+                return 1; // If no dependencies, it can start on day 1
+            }
 
-            // Step 1: Calculate the earliest start and end days
-            jobs.forEach(job => {
-                job.startDay = Math.max(1, ...job.dependencies.map(depId => jobMap.get(depId).endDay + 1));
-                job.endDay = job.startDay; // Each job takes exactly 1 day
+            // Find the end day of all dependency jobs
+            const dependencyEndDays = job.dependencies.map(depId => {
+                const depJob = jobs.find(j => j.id === depId);
+                return depJob ? depJob.endDay : 0;
             });
 
-            // Step 2: Calculate the latest end and start days
+            // The job can start the day after the last dependency finishes
+            return Math.max(...dependencyEndDays) + 1;
+        }
+
+        function calculateEarliestSchedule(jobs) {
+            jobs.forEach(job => {
+                job.startDay = findStartDay(job, jobs);
+                job.endDay = job.startDay; // Each job takes exactly 1 day
+            });
+        }
+
+        function calculateLatestSchedule(jobs) {
             const projectEndDay = Math.max(...jobs.map(job => job.endDay));
-            jobs.slice().reverse().forEach(job => {
+
+            jobs.reverse().forEach(job => {
                 if (job.dependencies.length === 0) {
                     job.latestEndDay = projectEndDay;
                 } else {
                     const dependents = jobs.filter(j => j.dependencies.includes(job.id));
-                    job.latestEndDay = Math.min(...dependents.map(dep => dep.startDay)) - 1;
+                    job.latestEndDay = dependents.length > 0 ? Math.min(...dependents.map(dep => dep.startDay)) - 1 : projectEndDay;
                 }
                 job.latestStartDay = job.latestEndDay - (job.endDay - job.startDay);
             });
 
+            jobs.reverse(); // Restore the original order
+        }
+
+        function calculateSchedule(jobs) {
+            calculateEarliestSchedule(jobs);
+            calculateLatestSchedule(jobs);
             return jobs;
         }
 
         const scheduledJobs = calculateSchedule(jobs);
-        
-        console.log(scheduledJobs);
 
         function renderSchedule(jobs) {
             const jobScheduleDiv = document.getElementById('jobSchedule');
