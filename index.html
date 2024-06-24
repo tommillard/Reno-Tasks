@@ -1,146 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Schedule</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .job-container {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr); /* Assuming a maximum of 10 days for simplicity */
-            gap: 1px;
-            margin-bottom: 10px;
-        }
-        .job {
-            display: contents;
-        }
-        .day {
-            border: 1px solid #ccc;
-            height: 20px;
-            text-align: center;
-        }
-        .active-day {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .category-header {
-            font-weight: bold;
-            margin-top: 20px;
-        }
-        .job-title {
-            grid-column: 1 / -1; /* Span all columns */
-            text-align: left;
-            padding-left: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Job Schedule</h1>
-    <div id="jobSchedule"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Job Schedule</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1>Job Schedule</h1>
+        <div id="jobSchedule"></div>
 
-    <script>
-        const jobs = [
-            { title: 'Job 1', id: 1, dependencies: [], category: 'Kitchen' },
-            { title: 'Job 2', id: 2, dependencies: [1], category: 'Kitchen' },
-            { title: 'Job 3', id: 3, dependencies: [1], category: 'Bathroom' },
-            { title: 'Job 4', id: 4, dependencies: [2, 3], category: 'Living Room' },
-            { title: 'Job 5', id: 5, dependencies: [4, 6], category: 'Living Room' },
-            { title: 'Job 6', id: 6, dependencies: [1, 4], category: 'Bedroom' },
-            { title: 'Job 7', id: 7, dependencies: [], category: 'Bathroom' }
-        ];
-
-        function findStartDay(job, jobs) {
-            if (job.dependencies.length === 0) {
-                return 1; // If no dependencies, it can start on day 1
-            }
-
-            // Find the end day of all dependency jobs
-            const dependencyEndDays = job.dependencies.map(depId => {
-                const depJob = jobs.find(j => j.id === depId);
-                return depJob ? depJob.endDay : 0;
-            });
-
-            // The job can start the day after the last dependency finishes
-            return Math.max(...dependencyEndDays) + 1;
-        }
-
-        function calculateEarliestSchedule(jobs) {
-            jobs.forEach(job => {
-                job.startDay = findStartDay(job, jobs);
-                job.endDay = job.startDay; // Each job takes exactly 1 day
-            });
-        }
-
-        function calculateLatestSchedule(jobs) {
-            const projectEndDay = Math.max(...jobs.map(job => job.endDay));
-
-            jobs.reverse().forEach(job => {
-                if (job.dependencies.length === 0) {
-                    job.latestEndDay = projectEndDay;
-                } else {
-                    const dependents = jobs.filter(j => j.dependencies.includes(job.id));
-                    job.latestEndDay = dependents.length > 0 ? Math.min(...dependents.map(dep => dep.startDay)) - 1 : projectEndDay;
-                }
-                job.latestStartDay = job.latestEndDay - (job.endDay - job.startDay);
-            });
-
-            jobs.reverse(); // Restore the original order
-        }
-
-        function calculateSchedule(jobs) {
-            calculateEarliestSchedule(jobs);
-            calculateLatestSchedule(jobs);
-            return jobs;
-        }
-
-        const scheduledJobs = calculateSchedule(jobs);
-
-        function renderSchedule(jobs) {
-            const jobScheduleDiv = document.getElementById('jobSchedule');
-
-            // Group jobs by category
-            const categories = {};
-            jobs.forEach(job => {
-                if (!categories[job.category]) {
-                    categories[job.category] = [];
-                }
-                categories[job.category].push(job);
-            });
-
-            // Render each category and its jobs
-            for (const category in categories) {
-                const categoryHeader = document.createElement('div');
-                categoryHeader.className = 'category-header';
-                categoryHeader.textContent = category;
-                jobScheduleDiv.appendChild(categoryHeader);
-
-                categories[category].forEach(job => {
-                    const jobContainer = document.createElement('div');
-                    jobContainer.className = 'job-container';
-
-                    const jobTitle = document.createElement('div');
-                    jobTitle.className = 'job-title';
-                    jobTitle.textContent = job.title;
-                    jobContainer.appendChild(jobTitle);
-
-                    for (let day = 1; day <= 10; day++) { // Assuming a maximum of 10 days for simplicity
-                        const dayDiv = document.createElement('div');
-                        dayDiv.className = 'day';
-                        if (day >= job.startDay && day <= job.latestEndDay) {
-                            dayDiv.classList.add('active-day');
-                        }
-                        jobContainer.appendChild(dayDiv);
-                    }
-
-                    jobScheduleDiv.appendChild(jobContainer);
-                });
-            }
-        }
-
-        renderSchedule(scheduledJobs);
-    </script>
-</body>
+        <script src="data.js"></script>
+        <script src="script.js"></script>
+    </body>
 </html>

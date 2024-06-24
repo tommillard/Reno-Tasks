@@ -1,0 +1,10 @@
+{
+    "name": "reno-tasks",
+    "version": "0.0.0",
+    "prettier": {
+        "tabWidth": 4,
+        "arrowParens": "always",
+        "trailingComma": "es5",
+        "htmlWhitespaceSensitivity": "ignore"
+    }
+}
