@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .job-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); /* Assuming a maximum of 10 days for simplicity */
+            gap: 1px;
+            margin-bottom: 10px;
+        }
+        .job {
+            display: contents;
+        }
+        .day {
+            border: 1px solid #ccc;
+            height: 20px;
+            text-align: center;
+        }
+        .active-day {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Job Schedule</h1>
+    <div id="jobSchedule"></div>
+
+    <script>
+        const jobs = [
+            { title: 'Job 1', id: 1, dependencies: [] },
+            { title: 'Job 2', id: 2, dependencies: [1] },
+            { title: 'Job 3', id: 3, dependencies: [1] },
+            { title: 'Job 4', id: 4, dependencies: [2, 3] },
+            { title: 'Job 5', id: 5, dependencies: [4] },
+            { title: 'Job 6', id: 6, dependencies: [1, 4] },
+            { title: 'Job 7', id: 7, dependencies: [] }
+        ];
+
+        function findStartDay(job, jobs) {
+            if (job.dependencies.length === 0) {
+                return 1; // If no dependencies, it can start on day 1
+            }
+
+            // Find the end day of all dependency jobs
+            const dependencyEndDays = job.dependencies.map(depId => {
+                const depJob = jobs.find(j => j.id === depId);
+                return depJob.endDay;
+            });
+
+            // The job can start the day after the last dependency finishes
+            return Math.max(...dependencyEndDays) + 1;
+        }
+
+        function calculateSchedule(jobs) {
+            jobs.forEach(job => {
+                job.startDay = findStartDay(job, jobs);
+                job.endDay = job.startDay; // Each job takes exactly 1 day
+            });
+
+            return jobs;
+        }
+
+        const scheduledJobs = calculateSchedule(jobs);
+
+        function renderSchedule(jobs) {
+            const jobScheduleDiv = document.getElementById('jobSchedule');
+
+            jobs.forEach(job => {
+                const jobContainer = document.createElement('div');
+                jobContainer.className = 'job-container';
+
+                for (let day = 1; day <= 10; day++) { // Assuming a maximum of 10 days for simplicity
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'day';
+                    if (day >= job.startDay && day <= job.endDay) {
+                        dayDiv.classList.add('active-day');
+                    }
+                    jobContainer.appendChild(dayDiv);
+                }
+
+                jobScheduleDiv.appendChild(jobContainer);
+            });
+        }
+
+        renderSchedule(scheduledJobs);
+    </script>
+</body>
+</html>
