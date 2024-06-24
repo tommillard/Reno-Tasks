@@ -26,6 +26,15 @@
             background-color: #4CAF50;
             color: white;
         }
+        .category-header {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .job-title {
+            grid-column: 1 / -1; /* Span all columns */
+            text-align: left;
+            padding-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -34,13 +43,13 @@
 
     <script>
         const jobs = [
-            { title: 'Job 1', id: 1, dependencies: [] },
-            { title: 'Job 2', id: 2, dependencies: [1] },
-            { title: 'Job 3', id: 3, dependencies: [1] },
-            { title: 'Job 4', id: 4, dependencies: [2, 3] },
-            { title: 'Job 5', id: 5, dependencies: [4] },
-            { title: 'Job 6', id: 6, dependencies: [1, 4] },
-            { title: 'Job 7', id: 7, dependencies: [] }
+            { title: 'Job 1', id: 1, dependencies: [], category: 'Kitchen' },
+            { title: 'Job 2', id: 2, dependencies: [1], category: 'Kitchen' },
+            { title: 'Job 3', id: 3, dependencies: [1], category: 'Bathroom' },
+            { title: 'Job 4', id: 4, dependencies: [2, 3], category: 'Living Room' },
+            { title: 'Job 5', id: 5, dependencies: [4], category: 'Living Room' },
+            { title: 'Job 6', id: 6, dependencies: [1, 4], category: 'Bedroom' },
+            { title: 'Job 7', id: 7, dependencies: [], category: 'Bathroom' }
         ];
 
         function findStartDay(job, jobs) {
@@ -72,21 +81,43 @@
         function renderSchedule(jobs) {
             const jobScheduleDiv = document.getElementById('jobSchedule');
 
+            // Group jobs by category
+            const categories = {};
             jobs.forEach(job => {
-                const jobContainer = document.createElement('div');
-                jobContainer.className = 'job-container';
-
-                for (let day = 1; day <= 10; day++) { // Assuming a maximum of 10 days for simplicity
-                    const dayDiv = document.createElement('div');
-                    dayDiv.className = 'day';
-                    if (day >= job.startDay && day <= job.endDay) {
-                        dayDiv.classList.add('active-day');
-                    }
-                    jobContainer.appendChild(dayDiv);
+                if (!categories[job.category]) {
+                    categories[job.category] = [];
                 }
-
-                jobScheduleDiv.appendChild(jobContainer);
+                categories[job.category].push(job);
             });
+
+            // Render each category and its jobs
+            for (const category in categories) {
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'category-header';
+                categoryHeader.textContent = category;
+                jobScheduleDiv.appendChild(categoryHeader);
+
+                categories[category].forEach(job => {
+                    const jobContainer = document.createElement('div');
+                    jobContainer.className = 'job-container';
+
+                    const jobTitle = document.createElement('div');
+                    jobTitle.className = 'job-title';
+                    jobTitle.textContent = job.title;
+                    jobContainer.appendChild(jobTitle);
+
+                    for (let day = 1; day <= 10; day++) { // Assuming a maximum of 10 days for simplicity
+                        const dayDiv = document.createElement('div');
+                        dayDiv.className = 'day';
+                        if (day >= job.startDay && day <= job.endDay) {
+                            dayDiv.classList.add('active-day');
+                        }
+                        jobContainer.appendChild(dayDiv);
+                    }
+
+                    jobScheduleDiv.appendChild(jobContainer);
+                });
+            }
         }
 
         renderSchedule(scheduledJobs);
