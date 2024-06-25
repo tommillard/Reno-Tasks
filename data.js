@@ -20,13 +20,13 @@ const jobs = [
     {
         title: "Fit kitchen units",
         id: 4,
-        dependencies: [],
+        dependencies: [1,2,3,6,7],
         category: "Kitchen",
     },
     {
         title: "Fit worktops",
         id: 5,
-        dependencies: [],
+        dependencies: [4],
         category: "Kitchen",
     },
     {
@@ -38,18 +38,12 @@ const jobs = [
     {
         title: "Paint kitchen walls",
         id: 7,
-        dependencies: [],
-        category: "Kitchen",
-    },
-    {
-        title: "Choose paint",
-        id: 8,
-        dependencies: [],
+        dependencies: [8],
         category: "Kitchen",
     },
     {
         title: "Choose paint colour",
-        id: 9,
+        id: 8,
         dependencies: [],
         category: "Kitchen",
     },
@@ -62,25 +56,25 @@ const jobs = [
     {
         title: "Fit appliances",
         id: 11,
-        dependencies: [],
+        dependencies: [4],
         category: "Kitchen",
     },
     {
         title: "2nd fix electrics",
         id: 12,
-        dependencies: [],
+        dependencies: [4],
         category: "Kitchen",
     },
     {
         title: "2nd fix plumbing",
         id: 13,
-        dependencies: [],
+        dependencies: [2],
         category: "Kitchen",
     },
     {
         title: "Fit skirting",
         id: 14,
-        dependencies: [],
+        dependencies: [4],
         category: "Kitchen",
     },
 ];
