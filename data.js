@@ -49,32 +49,38 @@ const jobs = [
     },
     {
         title: "Choose worktops",
-        id: 10,
+        id: 9,
         dependencies: [],
         category: "Kitchen",
     },
     {
         title: "Fit appliances",
-        id: 11,
+        id: 10,
         dependencies: [4],
         category: "Kitchen",
     },
     {
         title: "2nd fix electrics",
-        id: 12,
+        id: 11,
         dependencies: [4],
         category: "Kitchen",
     },
     {
         title: "2nd fix plumbing",
-        id: 13,
+        id: 12,
         dependencies: [2],
         category: "Kitchen",
     },
     {
         title: "Fit skirting",
-        id: 14,
+        id: 13,
         dependencies: [4],
+        category: "Kitchen",
+    },
+    {
+        title: "Fit flooring",
+        id: 34,
+        dependencies: [1, 3],
         category: "Kitchen",
     },
     {
@@ -110,7 +116,7 @@ const jobs = [
     {
         title: "Fit flooring",
         id: 19,
-        dependencies: [14, 15, 16, 20, 21],
+        dependencies: [14, 15, 16, 20, 21, 34],
         category: "Dining Room",
     },
     {
