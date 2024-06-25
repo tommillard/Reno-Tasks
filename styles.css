@@ -6,7 +6,7 @@ body {
     grid-template-columns: repeat(
         var(--maxDays),
         1fr
-    ); /* Assuming a maximum of 10 days for simplicity */
+    gap: 1px;
     margin-bottom: 10px;
 }
 .job {
