@@ -4,17 +4,15 @@ body {
 .job-container {
     display: grid;
     grid-template-columns: repeat(
-        10,
+        var(--maxDays),
         1fr
     ); /* Assuming a maximum of 10 days for simplicity */
-    gap: 1px;
     margin-bottom: 10px;
 }
 .job {
     display: contents;
 }
 .day {
-    border: 1px solid #ccc;
     height: 20px;
     text-align: center;
 }
@@ -24,10 +22,9 @@ body {
 }
 .category-header {
     font-weight: bold;
+    padding: 20px 0;
     margin-top: 20px;
 }
 .job-title {
-    grid-column: 1 / -1; /* Span all columns */
     text-align: left;
-    padding-left: 10px;
 }

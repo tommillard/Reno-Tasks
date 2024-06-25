@@ -1,3 +1,5 @@
+let earliestEndDate = 0;
+
 function calculateSchedule(jobs) {
     let unscheduledTaskCount = jobs.length;
     let currentDependencyLevel = 0;
@@ -67,35 +69,29 @@ function calculateSchedule(jobs) {
         }
     }
 
-    let earliestEndDate = jobs.reduce((accumulator, current) => {
+    earliestEndDate = jobs.reduce((accumulator, current) => {
         accumulator = Math.max(current.endDay, accumulator);
         return accumulator;
     }, 0);
+
+    document.body.style.setProperty("--maxDays", earliestEndDate);
 
     for (var job of jobs) {
         let dependants = jobs.filter((_job) => {
             return _job.dependencies.includes(job.id);
         });
 
-        console.log(job, dependants);
-
         let latestFinishDate = dependants.reduce((accumulator, current) => {
             accumulator = Math.min(accumulator, current.startDay);
             return accumulator;
         }, earliestEndDate);
 
-        console.log(earliestEndDate);
-
         if (dependants.length === 0) {
-            console.log(job.id);
             job.endDay = earliestEndDate;
         } else {
             job.endDay = latestFinishDate;
         }
     }
-
-    console.log(jobs);
-
     return jobs;
 }
 
@@ -130,7 +126,7 @@ function renderSchedule(jobs) {
             jobTitle.textContent = job.title;
             jobContainer.appendChild(jobTitle);
 
-            for (let day = 1; day <= 10; day++) {
+            for (let day = 1; day <= earliestEndDate - 1; day++) {
                 // Assuming a maximum of 10 days for simplicity
                 const dayDiv = document.createElement("div");
                 dayDiv.className = "day";
