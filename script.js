@@ -20,9 +20,9 @@ function calculateSchedule(jobs) {
                 continue;
             }
 
-            if (job.dependencies.length !== currentDependencyLevel) {
-                continue;
-            }
+            //if (job.dependencies.length !== currentDependencyLevel) {
+                //continue;
+            //}
 
             if (job.dependencies.length === 0) {
                 job.scheduled = true;
@@ -60,6 +60,7 @@ function calculateSchedule(jobs) {
             unscheduledTaskCount--;
         }
 
+        /*
         let unscheduledJobsAtDependencyLevel = jobs.filter((job) => {
             return (
                 !job.scheduled &&
@@ -70,6 +71,7 @@ function calculateSchedule(jobs) {
         if (unscheduledJobsAtDependencyLevel.length === 0) {
             currentDependencyLevel++;
         }
+        */
     }
 
     earliestEndDate = jobs.reduce((accumulator, current) => {
