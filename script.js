@@ -10,6 +10,9 @@ function calculateSchedule(jobs) {
         if (currentLoopCount > maxLoopCount) {
             break;
         }
+        if(currentLoopCount > 150) {
+            debugger;
+        }
         currentLoopCount++;
 
         for (var job of jobs) {
