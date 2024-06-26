@@ -15,6 +15,7 @@ body {
 .day {
     height: 20px;
     text-align: center;
+    min-width: 10px;
 }
 .active-day {
     background-color: #4caf50;
@@ -27,4 +28,6 @@ body {
 }
 .job-title {
     text-align: left;
+    font-size: 11px;
+    min-width: 50px;
 }
