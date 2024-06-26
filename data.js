@@ -104,7 +104,7 @@ const jobs = [
     {
         title: "1 fix electrics",
         id: 17,
-        dependencies: [17],
+        dependencies: [18],
         category: "Dining Room",
     },
     {
