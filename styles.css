@@ -3,9 +3,8 @@ body {
 }
 .job-container {
     display: grid;
-    grid-template-columns: repeat(
-        var(--maxDays),
-        1fr);
+    grid-auto-flow: column;
+    grid-template-columns: min-content;
     gap: 1px;
     margin-bottom: 10px;
 }
@@ -29,5 +28,5 @@ body {
 .job-title {
     text-align: left;
     font-size: 11px;
-    min-width: 50px;
+    min-width: 150px;
 }
