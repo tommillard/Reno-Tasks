@@ -151,7 +151,7 @@ function renderSchedule(jobs) {
 let selectedJob = null;
 
 document.addEventListener("pointerdown", (e) => {
-    if(selectedJob === null && e.target.closest(".job-container") {
+    if(selectedJob === null && e.target.closest(".job-container")) {
         let selectedJob = e.target.closest(".job-container")?.getAttribute("job-id");
         if(selectedJob) {
             let jobInData = jobs.find(job => job.id === parseInt(selectedJob));
