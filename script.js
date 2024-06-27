@@ -125,6 +125,7 @@ function renderSchedule(jobs) {
         categories[category].forEach((job) => {
             const jobContainer = document.createElement("div");
             jobContainer.className = "job-container";
+            jobContainer.setAttribute("job-id", job.id);
 
             const jobTitle = document.createElement("div");
             jobTitle.className = "job-title";
@@ -135,6 +136,7 @@ function renderSchedule(jobs) {
                 // Assuming a maximum of 10 days for simplicity
                 const dayDiv = document.createElement("div");
                 dayDiv.className = "day";
+                
                 if (day >= job.startDay && day < job.endDay) {
                     dayDiv.classList.add("active-day");
                 }
@@ -145,5 +147,21 @@ function renderSchedule(jobs) {
         });
     }
 }
+
+let selectedJob = null;
+
+document.addEventListener("pointerdown", (e) => {
+    if(selectedJob === null && e.target.closest(".job-container") {
+        let selectedJob = e.target.closest(".job-container")?.getAttribute("job-id");
+        if(selectedJob) {
+            let jobInData = jobs.find(job => job.id === parseInt(selectedJob));
+            if(jobInData) {
+                for(var dependency of jobInData.dependencies) {
+                    document.querySelector(`[job-id="dependency"]`).classList.add("highlight");
+                }
+            }
+        }
+    } 
+});
 
 renderSchedule(scheduledJobs);
