@@ -151,7 +151,11 @@ function renderSchedule(jobs) {
 let selectedJob = null;
 
 document.addEventListener("pointerdown", (e) => {
-    if(selectedJob === null && e.target.closest(".job-container")) {
+    let jobRows = document.querySelectorAll("[job-id]");
+    for( job of jobRows) {
+        job.classList.remove("highlight");
+    }
+    if(e.target.closest(".job-container")) {
         selectedJob = e.target.closest(".job-container")?.getAttribute("job-id");
         if(selectedJob) {
             let jobInData = jobs.find(job => job.id === parseInt(selectedJob));
@@ -161,7 +165,7 @@ document.addEventListener("pointerdown", (e) => {
                 }
             }
         }
-    } 
+    }
 });
 
 renderSchedule(scheduledJobs);
