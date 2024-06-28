@@ -19,7 +19,7 @@ body {
     background-color: #4caf50;
     color: white;
 }
-.highlighted .active-day {
+.highlight .active-day {
     background-color: magenta;
 }
 .category-header {
@@ -32,6 +32,6 @@ body {
     font-size: 11px;
     min-width: 150px;
 }
-.highlighted .job-title {
+.highlight .job-title {
     font-weight: bold;
 }
