@@ -157,7 +157,7 @@ document.addEventListener("pointerdown", (e) => {
             let jobInData = jobs.find(job => job.id === parseInt(selectedJob));
             if(jobInData) {
                 for(var dependency of jobInData.dependencies) {
-                    document.querySelector(`[job-id="dependency"]`).classList.add("highlight");
+                    document.querySelector(`[job-id="${dependency}"]`).classList.add("highlight");
                 }
             }
         }
